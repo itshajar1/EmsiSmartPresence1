@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="profile_image_desc">User profile picture. Tap to edit profile.</string>
+    <string name="select_day">Select a day</string>
+    <string name="filter">Filter</string>
+    <string name="no_courses">No courses scheduled for this day</string>
+    <string name="loading">Loading timetable...</string>
+    <string name="error_loading">Error loading timetable</string>
+    <string name="recycler_view_description">List of timetable entries</string>
+</resources>
