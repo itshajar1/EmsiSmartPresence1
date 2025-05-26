@@ -8,90 +8,141 @@
     android:background="@android:color/white"
     android:clipToPadding="false">
 
-    <!-- Header -->
+    <!-- Add Document Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/addDocumentButton"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginBottom="16dp"
+        android:text="Add Document"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        app:backgroundTint="#388E3C"
+        app:cornerRadius="12dp"
+        app:icon="@drawable/ic_add"
+        app:iconGravity="start"
+        app:iconPadding="8dp"
+        app:iconTint="@android:color/white"
+        app:rippleColor="#66BB6A"/>
+
+    <!-- Add Document Section (Initially Hidden) -->
+    <LinearLayout
+        android:id="@+id/addDocumentSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="24dp">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add New Document"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:paddingBottom="16dp"/>
+
+        <!-- Document Name -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/documentNameInputLayout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="Document name"
+            app:boxStrokeColor="#388E3C"
+            app:endIconMode="clear_text"
+            app:endIconTint="#388E3C"
+            app:hintTextColor="#388E3C"
+            app:startIconDrawable="@drawable/ic_document"
+            app:startIconTint="#388E3C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/documentNameInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#1A1A1A"
+                android:textColorHint="#9E9E9E"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Document URL -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/documentUrlInputLayout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:hint="Document URL"
+            app:boxStrokeColor="#388E3C"
+            app:endIconMode="clear_text"
+            app:endIconTint="#388E3C"
+            app:hintTextColor="#388E3C"
+            app:startIconDrawable="@drawable/ic_link"
+            app:startIconTint="#388E3C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/documentUrlInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textUri"
+                android:textColor="#1A1A1A"
+                android:textColorHint="#9E9E9E"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Save Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/saveButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Save Document"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            app:backgroundTint="#388E3C"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_save"
+            app:iconGravity="start"
+            app:iconPadding="8dp"
+            app:iconTint="@android:color/white"
+            app:rippleColor="#66BB6A"/>
+
+    </LinearLayout>
+
+    <!-- Documents Header -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add New Document"
-        android:textColor="@android:color/darker_gray"
-    android:textSize="24sp"
-    android:textStyle="bold"
-    android:paddingBottom="16dp"/>
+        android:text="Your Documents"
+        android:textColor="#2E7D32"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingBottom="8dp"
+        android:drawablePadding="8dp"
+        android:drawableStart="@drawable/ic_folder"/>
 
-    <!-- Document Name -->
+    <!-- Search Input -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/documentNameInputLayout"
+        android:id="@+id/searchInputLayout"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:hint="Document name"
+        android:hint="Search documents..."
         app:boxStrokeColor="#388E3C"
-    app:endIconMode="clear_text"
-    app:endIconTint="#388E3C"
-    app:hintTextColor="#388E3C"
-    app:startIconDrawable="@drawable/ic_document"
-    app:startIconTint="#388E3C">
+        app:endIconMode="clear_text"
+        app:endIconTint="#388E3C"
+        app:hintTextColor="#388E3C"
+        app:startIconDrawable="@drawable/ic_search"
+        app:startIconTint="#388E3C">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/documentNameInput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#1A1A1A"
-        android:textColorHint="#9E9E9E"/>
-</com.google.android.material.textfield.TextInputLayout>
-
-    <!-- Document URL -->
-<com.google.android.material.textfield.TextInputLayout
-android:id="@+id/documentUrlInputLayout"
-style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_marginBottom="24dp"
-android:hint="Document URL"
-app:boxStrokeColor="#388E3C"
-app:endIconMode="clear_text"
-app:endIconTint="#388E3C"
-app:hintTextColor="#388E3C"
-app:startIconDrawable="@drawable/ic_link"
-app:startIconTint="#388E3C">
-
-<com.google.android.material.textfield.TextInputEditText
-    android:id="@+id/documentUrlInput"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:inputType="textUri"
-    android:textColor="#1A1A1A"
-    android:textColorHint="#9E9E9E"/>
-</com.google.android.material.textfield.TextInputLayout>
-
-    <!-- Save Button -->
-<com.google.android.material.button.MaterialButton
-android:id="@+id/saveButton"
-android:layout_width="match_parent"
-android:layout_height="56dp"
-android:layout_marginBottom="24dp"
-android:text="Save Document"
-android:textAllCaps="false"
-android:textSize="16sp"
-app:backgroundTint="#388E3C"
-    app:cornerRadius="12dp"
-    app:icon="@drawable/ic_save"
-    app:iconGravity="start"
-    app:iconPadding="8dp"
-    app:iconTint="@android:color/white"
-    app:rippleColor="#66BB6A"/>
-    <!-- Documents Header -->
-<TextView
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:text="Your Documents"
-android:textColor="#2E7D32"
-android:textSize="20sp"
-android:textStyle="bold"
-android:paddingBottom="8dp"
-android:drawablePadding="8dp"
-android:drawableStart="@drawable/ic_folder"/>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/searchInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#1A1A1A"
+            android:textColorHint="#9E9E9E"
+            android:inputType="text"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <ListView
         android:id="@+id/documentListView"
@@ -100,6 +151,5 @@ android:drawableStart="@drawable/ic_folder"/>
         android:divider="@android:color/darker_gray"
         android:dividerHeight="0.5dp"
         android:paddingTop="10dp"/>
-
 
 </LinearLayout>
