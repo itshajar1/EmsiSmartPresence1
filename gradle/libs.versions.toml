@@ -11,7 +11,11 @@ activity = "1.8.0"
 constraintlayout = "2.1.4"
 googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
 playServicesMaps = "19.2.0"
+<<<<<<< HEAD
 appcompatVersion = "1.7.0"
+=======
+xcomGoogleAndroidMaterialMaterial = "1.11.0"
+>>>>>>> f19ba3a85dd9a474eaa4664fecb8cc88f6aa2ff8
 
 [libraries]
 calendarview = { module = "com.github.kizitonwose:CalendarView", version.ref = "calendarview" }
@@ -26,9 +30,12 @@ material = { group = "com.google.android.material", name = "material", version.r
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+<<<<<<< HEAD
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompatVersion" }
+=======
+xcom-google-android-material-material2 = { module = "com.google.android.material:material", version.ref = "xcomGoogleAndroidMaterialMaterial" }
+>>>>>>> f19ba3a85dd9a474eaa4664fecb8cc88f6aa2ff8
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 google-android-libraries-mapsplatform-secrets-gradle-plugin = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "googleAndroidLibrariesMapsplatformSecretsGradlePlugin" }
-
