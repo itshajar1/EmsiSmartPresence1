@@ -68,5 +68,16 @@ dependencies {
 // Gson pour la manipulation JSON
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation ("org.json:json:20230227")
+    // CameraX for modern camera implementation
+    implementation("androidx.camera:camera-core:1.3.2")
+    implementation("androidx.camera:camera-camera2:1.3.2")
+    implementation("androidx.camera:camera-lifecycle:1.3.2")
+    implementation("androidx.camera:camera-view:1.3.2")
+
+    // Permissions handling
+    implementation("com.karumi:dexter:6.2.3")
+
+    // Image compression
+    implementation("id.zelory:compressor:3.0.1")
 
 }
