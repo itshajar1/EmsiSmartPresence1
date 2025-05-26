@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,6 +50,7 @@ public class Signin extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(Signin.this, "Success authentication", Toast.LENGTH_LONG).show();
                             Intent i = new Intent(Signin.this, Home.class);
+                            Log.d("DEBUG", "Layout inflated");
                             startActivity(i);
                         } else {
                             Toast.makeText(Signin.this, "authentication failed", Toast.LENGTH_LONG).show();

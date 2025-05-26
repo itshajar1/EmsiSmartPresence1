@@ -33,6 +33,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
+
 }
 
 
@@ -42,6 +43,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
@@ -61,7 +63,7 @@ dependencies {
     implementation ("androidx.cardview:cardview:1.0.0")
     // OkHttp pour les requêtes HTTP
     implementation ("com.squareup.okhttp3:okhttp:4.12.0")
-
+    implementation ("com.prolificinteractive:material-calendarview:1.4.0")
 
 // Gson pour la manipulation JSON
     implementation ("com.google.code.gson:gson:2.10.1")

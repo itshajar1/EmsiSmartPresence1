@@ -35,5 +35,46 @@
         <item name="android:gravity">center</item>
         <item name="android:padding">4dp</item>
     </style>
+    <!-- Calendar styling -->
+    <style name="CalendarTitle" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/green2</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
+    <style name="CalendarDate" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="CalendarWeekDay" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <!-- Spinner Style -->
+    <style name="OutlinedSpinnerStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/outline_color</item>
+        <item name="hintTextColor">@color/secondary_text</item>
+        <item name="android:textColorHint">@color/secondary_text</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusTopStart">8dp</item>
+    </style>
+
+    <!-- Button Styles -->
+    <style name="FilledButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/primary_color</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:paddingVertical">12dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="OutlinedButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">@color/primary_color</item>
+        <item name="android:textColor">@color/primary_color</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:paddingVertical">12dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>

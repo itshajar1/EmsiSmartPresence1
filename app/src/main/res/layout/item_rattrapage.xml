@@ -1,41 +1,37 @@
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="8dp"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="12dp"
-    card_view:cardElevation="4dp">
+    app:cardElevation="4dp"
+    app:cardCornerRadius="8dp"
+    android:layout_margin="8dp">
 
     <LinearLayout
-        android:padding="16dp"
         android:orientation="vertical"
+        android:padding="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/textDateHeure"
-            android:text="Lundi 28 Mai à 14:00"
-            android:textStyle="bold"
+            android:text="Lundi 15h30"
             android:textSize="16sp"
-            android:textColor="#000000"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/textMatiere"
             android:text="Mathématiques"
-            android:textSize="15sp"
-            android:textColor="#3F51B5"
-            android:layout_marginTop="4dp"
+            android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/textClasseGroupe"
-            android:text="Classe A - Groupe 1"
+            android:text="Licence 1 - Groupe B"
             android:textSize="14sp"
-            android:textColor="#555555"
-            android:layout_marginTop="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>

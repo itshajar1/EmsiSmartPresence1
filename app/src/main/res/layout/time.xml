@@ -1,31 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#F5F5F5"
-    tools:context=".time">
+    android:background="#F1F8E9">
 
-    <TextView
-        android:id="@+id/tv_timetable_title"
-        android:layout_width="match_parent"
+    <!-- Indicateur de Chargement -->
+    <ProgressBar
+        android:id="@+id/loadingIndicator"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Emploi du Temps"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:paddingBottom="16dp" />
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        style="?android:attr/progressBarStyleLarge"
+        android:indeterminateTint="#4CAF50" />
 
-    <ExpandableListView
-        android:id="@+id/elv_schedule"
+    <!-- État Vide -->
+    <TextView
+        android:id="@+id/emptyStateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Aucun emploi du temps disponible"
+        android:textSize="16sp"
+        android:textColor="#2E7D32"
+        android:gravity="center"
+        android:visibility="gone"
+        android:drawableTop="@android:drawable/ic_dialog_alert"
+        android:drawablePadding="16dp" />
+
+    <!-- Conteneur Principal de l'Emploi du Temps - Plein Écran -->
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
-        android:childDivider="@null"
-        android:groupIndicator="@null"
-        android:childIndicator="@null" />
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false"
+        android:fillViewport="true">
 
-</LinearLayout>
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal"
+            android:fadeScrollbars="false"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp">
+
+                <TableLayout
+                    android:id="@+id/tableLayoutSchedule"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:stretchColumns="*"
+                    android:shrinkColumns="*"
+                    android:background="@drawable/table_background"
+                    android:elevation="4dp">
+
+                    <!-- Le contenu dynamique sera ajouté par programmation -->
+
+                </TableLayout>
+
+                <!-- Légende - Déplacée vers le bas et rendue plus proéminente -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/legend_background"
+                    android:elevation="2dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="📖 LÉGENDE"
+                        android:textColor="#2E7D32"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:lineSpacingExtra="2dp"
+                        android:text="⏰ Heure  📚 Matière  👥 Groupe  🎓 Classe  🏢 Salle"
+                        android:textColor="#388E3C"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+    </ScrollView>
+
+
+</RelativeLayout>

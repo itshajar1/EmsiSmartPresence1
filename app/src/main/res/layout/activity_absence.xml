@@ -1,60 +1,426 @@
-<!-- res/layout/activity_absence.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/home"
+    android:fillViewport="true">
 
-    <Spinner
-        android:id="@+id/spinnerClass"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:padding="12dp" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
+        <!-- Header with icon -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="24dp">
 
-    <Spinner
-        android:id="@+id/spinnerGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:padding="12dp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_absence"
+                android:color="@color/primary_color"
+                android:layout_marginEnd="8dp"/>
 
-    <Spinner
-        android:id="@+id/spinnerSite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:padding="12dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enregistrement d'absence"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/textDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Sélectionnez la date"
-        android:padding="10dp"
-        android:background="@android:color/darker_gray"
-        android:textColor="@android:color/white" />
+        <!-- Form Container Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerStudents"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:contentDescription="Liste des étudiants à marquer présent ou absent"/>
+            app:cardBackgroundColor="@color/white"
+            app:strokeColor="@color/primary_text"
+            app:strokeWidth="1dp"
+            app:cardElevation="4dp"
+            >
 
-    <EditText
-        android:id="@+id/editRemarks"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:padding="12dp"
-        android:hint="Remarques..."
-        android:background="@android:drawable/edit_text" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
+                <!-- First Row: Class and Group -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
 
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Enregistrer l'absence" />
-</LinearLayout>
+                    <!-- Class Spinner -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginEnd="8dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_group"
+                            android:color="@color/secondary_text"
+                            android:layout_marginEnd="8dp"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/OutlinedSpinnerStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="Sélectionner une classe">
+
+                            <Spinner
+                                android:id="@+id/spinnerClass"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:spinnerMode="dropdown"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <!-- Group Spinner -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginStart="8dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_people"
+                            android:color="@color/secondary_text"
+                            android:layout_marginEnd="8dp"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/OutlinedSpinnerStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="Sélectionner un groupe">
+
+                            <Spinner
+                                android:id="@+id/spinnerGroup"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:spinnerMode="dropdown"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Second Row: Site and Date -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Site Spinner -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginEnd="8dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_location"
+                            android:color="@color/secondary_text"
+                            android:layout_marginEnd="8dp"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/OutlinedSpinnerStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="Sélectionner un site">
+
+                            <Spinner
+                                android:id="@+id/spinnerSite"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:spinnerMode="dropdown"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <!-- Date Picker -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginStart="8dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_calendar_today"
+                            android:color="@color/secondary_text"
+                            android:layout_marginEnd="8dp"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/OutlinedSpinnerStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="Sélectionner la date">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/textDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:minHeight="48dp"
+                                android:gravity="center_vertical"
+                                android:text="Choisir une date"
+                                android:textColor="@color/secondary_text"
+                                android:textSize="14sp"
+                                android:clickable="true"
+                                android:focusable="true"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Students List Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+
+            app:cardBackgroundColor="@color/white"
+            app:strokeColor="@color/primary_text"
+            app:strokeWidth="1dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Student list header with icon and search -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_person"
+                        android:color="@color/primary_color"
+                        android:layout_marginEnd="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Liste des étudiants"
+                        android:textColor="@color/primary_text"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+                    <!-- Search Icon -->
+                    <ImageView
+                        android:id="@+id/searchIcon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_search"
+                        android:color="@color/primary_color"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:padding="4dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:contentDescription="Rechercher un étudiant"/>
+                </LinearLayout>
+
+                <!-- Search Bar (initially hidden) -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/searchLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:hint="Rechercher un étudiant..."
+                    android:visibility="gone"
+                    app:startIconDrawable="@drawable/ic_search"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/searchEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:maxLines="1"/>
+                </com.google.android.material.textfield.TextInputLayout>
+                <!-- Filter Buttons -->
+                <LinearLayout
+                    android:id="@+id/filterButtons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="8dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAll"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="Tous"
+                        android:textSize="12sp"
+                        android:layout_marginEnd="8dp"
+                        app:backgroundTint="@color/white"
+                        app:rippleColor="@color/primary_color"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnPresent"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="Présents"
+                        android:textSize="12sp"
+                        android:layout_marginEnd="8dp"
+                        app:backgroundTint="@color/white"
+                        app:rippleColor="@color/primary_color"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAbsent"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="Absents"
+                        android:textSize="12sp"
+                        app:backgroundTint="@color/white"
+                        app:rippleColor="@color/primary_color"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="8dp"
+                    android:background="@color/divider"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerStudents"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    android:clipToPadding="false"
+                    android:padding="4dp"
+                    tools:listitem="@layout/item_student_attendance" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Remarks Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="12dp"
+
+            app:cardBackgroundColor="@color/white"
+            app:strokeColor="@color/primary_text"
+            app:strokeWidth="1dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_comment"
+                    android:color="@color/secondary_text"
+                    android:layout_marginEnd="12dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Remarques">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editRemarks"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:gravity="top|start"
+                        android:hint="Ajoutez des remarques..."
+                        android:inputType="textMultiLine"
+                        android:maxLines="5"/>
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Enhanced Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:gravity="center">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancel"
+                style="@style/OutlinedButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="Annuler"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                app:icon="@drawable/ic_close"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="@color/primary_color"
+                app:rippleColor="@color/primary_color"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSave"
+                style="@style/FilledButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                android:text="Enregistrer"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                app:icon="@drawable/ic_save"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="@android:color/white"
+                app:rippleColor="@color/primary_color"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -43,6 +43,14 @@ public class Home extends AppCompatActivity {
         // Apply font style to the username TextView
         TextView userNameTextView = findViewById(R.id.user_name);
         userNameTextView.setTypeface(Typeface.SANS_SERIF);
+        View btnSignOut = findViewById(R.id.btnSignOut);
+        btnSignOut.setOnClickListener(v -> {
+            mAuth.signOut();
+            Intent intent = new Intent(Home.this, Signin.class); // Change to your login activity
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish(); // Close the current activity
+        });
 
         // Set up all the clickable features/buttons with their actions
         setupFeatureButtons();
@@ -72,7 +80,7 @@ public class Home extends AppCompatActivity {
         absencesButton.setOnClickListener(v -> openAbsences());
     }
     private void setupChatbotButton() {
-        Button btnChatbot = findViewById(R.id.btnChatbot);
+        View btnChatbot = findViewById(R.id.btnChatbot);
         btnChatbot.setOnClickListener(v -> openChatbot());
     }
     private void openMaps() {
