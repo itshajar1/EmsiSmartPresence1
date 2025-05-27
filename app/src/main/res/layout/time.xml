@@ -102,5 +102,17 @@
 
     </ScrollView>
 
-
+    <!-- Bouton d'Action Flottant pour Actualiser -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@android:drawable/ic_popup_sync"
+        app:tint="@android:color/white"
+        app:backgroundTint="#4CAF50"
+        android:contentDescription="Actualiser l'Emploi du Temps" />
 </RelativeLayout>

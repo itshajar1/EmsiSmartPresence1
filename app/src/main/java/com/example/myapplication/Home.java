@@ -45,6 +45,7 @@ public class Home extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int CAMERA_REQUEST = 2;
+    private static final int CAMERA_PERMISSION_CODE = 100;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -73,35 +74,75 @@ public class Home extends AppCompatActivity {
         storageRef = storage.getReference();
 
         // Initialize views
+        initializeViews();
+
+        // Set up user info
+        setupUserInfo();
+
+        // Set up click listeners
+        setupClickListeners();
+
+        // Profile image handling
+        setupProfileImageHandling();
+
+        // Notifications setup
+        setupNotifications();
+    }
+
+    private void initializeViews() {
         notificationsPopup = findViewById(R.id.notifications_popup);
         notificationsContainer = findViewById(R.id.notifications_container);
         notificationIcon = findViewById(R.id.notification_icon);
         profileImage = findViewById(R.id.profile_image);
         addPhotoButton = findViewById(R.id.btn_add_photo);
 
-        // Set up user info
+        // Initially hide notifications
+        if (notificationsPopup != null) {
+            notificationsPopup.setVisibility(View.GONE);
+        }
+        if (notificationIcon != null) {
+            notificationIcon.setVisibility(View.GONE);
+        }
+    }
+
+    private void setupUserInfo() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         TextView userNameTextView = findViewById(R.id.user_name);
-        if (currentUser != null && currentUser.getDisplayName() != null) {
-            userNameTextView.setText(currentUser.getDisplayName());
-        } else {
-            userNameTextView.setText("No Name Set");
+        if (userNameTextView != null) {
+            if (currentUser != null && currentUser.getDisplayName() != null) {
+                userNameTextView.setText(currentUser.getDisplayName());
+            } else {
+                userNameTextView.setText("No Name Set");
+            }
+            userNameTextView.setTypeface(Typeface.SANS_SERIF);
         }
-        userNameTextView.setTypeface(Typeface.SANS_SERIF);
+    }
 
-        // Set up click listeners
-        findViewById(R.id.btnSignOut).setOnClickListener(v -> signOut());
+    private void setupClickListeners() {
+        View signOutBtn = findViewById(R.id.btnSignOut);
+        if (signOutBtn != null) {
+            signOutBtn.setOnClickListener(v -> signOut());
+        }
+
         setupFeatureButtons();
         setupChatbotButton();
         setupSettingsButton();
+    }
 
-        // Profile image handling
-        profileImage.setOnClickListener(v -> openSettings());
-        addPhotoButton.setOnClickListener(v -> showImagePickerDialog());
+    private void setupProfileImageHandling() {
+        if (profileImage != null) {
+            profileImage.setOnClickListener(v -> openSettings());
+        }
+        if (addPhotoButton != null) {
+            addPhotoButton.setOnClickListener(v -> showImagePickerDialog());
+        }
         loadProfileImage();
+    }
 
-        // Notifications setup
-        notificationIcon.setOnClickListener(v -> toggleNotifications());
+    private void setupNotifications() {
+        if (notificationIcon != null) {
+            notificationIcon.setOnClickListener(v -> toggleNotifications());
+        }
         loadNotificationsFromFirebase();
     }
 
@@ -115,32 +156,51 @@ public class Home extends AppCompatActivity {
 
     private void toggleNotifications() {
         if (notifications.isEmpty()) {
-            notificationsPopup.setVisibility(View.GONE);
+            if (notificationsPopup != null) {
+                notificationsPopup.setVisibility(View.GONE);
+            }
             return;
         }
 
-        if (notificationsVisible) {
-            notificationsPopup.setVisibility(View.GONE);
-        } else {
-            notificationsPopup.setVisibility(View.VISIBLE);
+        if (notificationsPopup != null) {
+            if (notificationsVisible) {
+                notificationsPopup.setVisibility(View.GONE);
+            } else {
+                notificationsPopup.setVisibility(View.VISIBLE);
+            }
         }
         notificationsVisible = !notificationsVisible;
     }
 
     private void setupFeatureButtons() {
-        findViewById(R.id.map).setOnClickListener(v -> openMaps());
-        findViewById(R.id.doc).setOnClickListener(v -> openDocuments());
-        findViewById(R.id.time).setOnClickListener(v -> openTimetable());
-        findViewById(R.id.ratt).setOnClickListener(v -> openRattrapages());
-        findViewById(R.id.abs).setOnClickListener(v -> openAbsences());
+        View mapBtn = findViewById(R.id.map);
+        if (mapBtn != null) mapBtn.setOnClickListener(v -> openMaps());
+
+        View docBtn = findViewById(R.id.doc);
+        if (docBtn != null) docBtn.setOnClickListener(v -> openDocuments());
+
+        View timeBtn = findViewById(R.id.time);
+        if (timeBtn != null) timeBtn.setOnClickListener(v -> openTimetable());
+
+        View rattBtn = findViewById(R.id.ratt);
+        if (rattBtn != null) rattBtn.setOnClickListener(v -> openRattrapages());
+
+        View absBtn = findViewById(R.id.abs);
+        if (absBtn != null) absBtn.setOnClickListener(v -> openAbsences());
     }
 
     private void setupChatbotButton() {
-        findViewById(R.id.btnChatbot).setOnClickListener(v -> openChatbot());
+        View chatbotBtn = findViewById(R.id.btnChatbot);
+        if (chatbotBtn != null) {
+            chatbotBtn.setOnClickListener(v -> openChatbot());
+        }
     }
 
     private void setupSettingsButton() {
-        findViewById(R.id.btnSettings).setOnClickListener(v -> openSettings());
+        View settingsBtn = findViewById(R.id.btnSettings);
+        if (settingsBtn != null) {
+            settingsBtn.setOnClickListener(v -> openSettings());
+        }
     }
 
     // Profile Image Methods
@@ -162,11 +222,13 @@ public class Home extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST);
+                    new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
         } else {
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (cameraIntent.resolveActivity(getPackageManager()) != null) {
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            } else {
+                Toast.makeText(this, "Camera not available", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -188,31 +250,38 @@ public class Home extends AppCompatActivity {
                 uploadImageToFirebase();
             } else if (requestCode == CAMERA_REQUEST && data != null && data.getExtras() != null) {
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
-                profileImage.setImageBitmap(photo);
-                uploadBitmapToFirebase(photo);
+                if (photo != null && profileImage != null) {
+                    profileImage.setImageBitmap(photo);
+                    uploadBitmapToFirebase(photo);
+                }
             }
         }
     }
 
     private void uploadImageToFirebase() {
-        if (imageUri != null) {
+        if (imageUri != null && mAuth.getCurrentUser() != null) {
             String userId = mAuth.getCurrentUser().getUid();
             StorageReference fileRef = storageRef.child("profile_images/" + userId + ".jpg");
 
             fileRef.putFile(imageUri)
                     .addOnSuccessListener(taskSnapshot -> {
                         fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                            Glide.with(this).load(uri).into(profileImage);
+                            if (profileImage != null) {
+                                Glide.with(this).load(uri).into(profileImage);
+                            }
                             Toast.makeText(this, "Profile photo updated", Toast.LENGTH_SHORT).show();
                         });
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("Home", "Upload failed", e);
                     });
         }
     }
 
     private void uploadBitmapToFirebase(Bitmap bitmap) {
+        if (bitmap == null || mAuth.getCurrentUser() == null) return;
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -223,20 +292,24 @@ public class Home extends AppCompatActivity {
         fileRef.putBytes(data)
                 .addOnSuccessListener(taskSnapshot -> {
                     fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        Glide.with(this).load(uri).into(profileImage);
+                        if (profileImage != null) {
+                            Glide.with(this).load(uri).into(profileImage);
+                        }
                         Toast.makeText(this, "Profile photo updated", Toast.LENGTH_SHORT).show();
                     });
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("Home", "Upload failed", e);
                 });
     }
 
     private void loadProfileImage() {
-        String userId = mAuth.getCurrentUser().getUid();
-        if (userId == null) return;
+        if (mAuth.getCurrentUser() == null || profileImage == null) return;
 
+        String userId = mAuth.getCurrentUser().getUid();
         StorageReference fileRef = storageRef.child("profile_images/" + userId + ".jpg");
+
         fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
             Glide.with(this)
                     .load(uri)
@@ -250,24 +323,14 @@ public class Home extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CAMERA_REQUEST && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == CAMERA_PERMISSION_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             takePhotoFromCamera();
+        } else if (requestCode == CAMERA_PERMISSION_CODE) {
+            Toast.makeText(this, "Camera permission is required to take photos", Toast.LENGTH_SHORT).show();
         }
     }
 
-    // Notification Methods (keep your existing notification code here)
-    private void loadNotificationsFromFirebase() {
-        notifications.clear();
-        String currentUserId = mAuth.getUid();
-        if (currentUserId == null) {
-            displayNotifications();
-            return;
-        }
-        loadRattrapagesNotifications(currentUserId);
-        loadAbsencesNotifications(currentUserId);
-    }
-
-    private void loadRattrapagesNotifications(String profId) {
+    private void loadRattrapagesNotifications(String profId, Runnable onComplete) {
         db.collection("rattrapages")
                 .whereEqualTo("profId", profId)
                 .get()
@@ -287,10 +350,11 @@ public class Home extends AppCompatActivity {
                             String heure = doc.getString("heure");
 
                             if (dateStr != null && matiere != null) {
-                                Date rattrapageDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(dateStr);
+                                Date rattrapageDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).parse(dateStr);
                                 if (rattrapageDate != null && rattrapageDate.compareTo(today.getTime()) >= 0) {
                                     long daysDiff = (rattrapageDate.getTime() - today.getTimeInMillis()) / (24 * 60 * 60 * 1000);
                                     String priority, title;
+
                                     if (daysDiff == 0) {
                                         priority = "urgent";
                                         title = "🔴 Rattrapage AUJOURD'HUI";
@@ -303,7 +367,9 @@ public class Home extends AppCompatActivity {
                                     } else if (daysDiff <= 7) {
                                         priority = "info";
                                         title = "🔵 Rattrapage à venir";
-                                    } else continue;
+                                    } else {
+                                        continue;
+                                    }
 
                                     String description = matiere + " - " + classe + " (" + groupe + ")\n" +
                                             dateStr + " à " + (heure != null ? heure : "heure non définie");
@@ -315,15 +381,65 @@ public class Home extends AppCompatActivity {
                             Log.e("Home", "Error parsing rattrapage date", e);
                         }
                     }
-                    displayNotifications();
+                    onComplete.run();
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Home", "Error loading rattrapages", e);
-                    displayNotifications();
+                    onComplete.run();
                 });
     }
 
-    private void loadAbsencesNotifications(String profId) {
+    private boolean isSameDay(Date date1, Date date2) {
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date1);
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(date2);
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
+    }
+
+    private void loadSeancesNotifications(String profId, Runnable onComplete) {
+        db.collection("seances")
+                .whereEqualTo("profId", profId)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    Calendar today = Calendar.getInstance();
+                    today.set(Calendar.HOUR_OF_DAY, 0);
+                    today.set(Calendar.MINUTE, 0);
+                    today.set(Calendar.SECOND, 0);
+                    today.set(Calendar.MILLISECOND, 0);
+
+                    for (DocumentSnapshot doc : querySnapshot) {
+                        try {
+                            String matiere = doc.getString("matiere");
+                            String groupe = doc.getString("groupe");
+                            String classe = doc.getString("classe");
+                            String dateStr = doc.getString("date");
+                            String heure = doc.getString("heure");
+
+                            if (dateStr != null && matiere != null) {
+                                Date seanceDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(dateStr);
+
+                                if (seanceDate != null && isSameDay(seanceDate, today.getTime())) {
+                                    String title = "📘 Séance aujourd'hui - " + matiere;
+                                    String description = matiere + " - " + classe + " (" + groupe + ") | " + dateStr + " à " + (heure != null ? heure : "Heure non définie");
+
+                                    notifications.add(new NotificationItem(title, description, "info", seanceDate, "seance"));
+                                }
+                            }
+                        } catch (ParseException e) {
+                            Log.e("Home", "Erreur lors du parsing de la date de séance", e);
+                        }
+                    }
+                    onComplete.run();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Home", "Erreur lors du chargement des séances", e);
+                    onComplete.run();
+                });
+    }
+
+    private void loadAbsencesNotifications(String profId, Runnable onComplete) {
         db.collection("absences")
                 .whereEqualTo("profId", profId)
                 .get()
@@ -367,26 +483,66 @@ public class Home extends AppCompatActivity {
                             Log.e("Home", "Error parsing absence date", e);
                         }
                     }
-                    displayNotifications();
+                    onComplete.run();
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Home", "Error loading absences", e);
-                    displayNotifications();
+                    onComplete.run();
                 });
     }
 
-    private void displayNotifications() {
-        notificationsContainer.removeAllViews();
-
-        if (notifications.isEmpty()) {
-            notificationsPopup.setVisibility(View.GONE);
-            notificationIcon.setVisibility(View.GONE);
+    private void loadNotificationsFromFirebase() {
+        notifications.clear();
+        String currentUserId = mAuth.getUid();
+        if (currentUserId == null) {
+            displayNotifications();
             return;
         }
 
-        notificationIcon.setVisibility(View.VISIBLE);
-        notificationsPopup.setVisibility(notificationsVisible ? View.VISIBLE : View.GONE);
+        // Counter to ensure all loadings are finished before displaying
+        final int[] loadingCount = {3}; // 3 types of notifications to load
 
+        // Helper method to decrement counter and display when everything is loaded
+        Runnable checkAndDisplay = () -> {
+            loadingCount[0]--;
+            if (loadingCount[0] == 0) {
+                displayNotifications();
+            }
+        };
+
+        // Load seances
+        loadSeancesNotifications(currentUserId, checkAndDisplay);
+
+        // Load rattrapages
+        loadRattrapagesNotifications(currentUserId, checkAndDisplay);
+
+        // Load absences
+        loadAbsencesNotifications(currentUserId, checkAndDisplay);
+    }
+
+    private void displayNotifications() {
+        if (notificationsContainer != null) {
+            notificationsContainer.removeAllViews();
+        }
+
+        if (notifications.isEmpty()) {
+            if (notificationsPopup != null) {
+                notificationsPopup.setVisibility(View.GONE);
+            }
+            if (notificationIcon != null) {
+                notificationIcon.setVisibility(View.GONE);
+            }
+            return;
+        }
+
+        if (notificationIcon != null) {
+            notificationIcon.setVisibility(View.VISIBLE);
+        }
+        if (notificationsPopup != null) {
+            notificationsPopup.setVisibility(notificationsVisible ? View.VISIBLE : View.GONE);
+        }
+
+        // Sort notifications by priority and date
         notifications.sort((n1, n2) -> {
             int priorityCompare = getPriorityWeight(n2.priority) - getPriorityWeight(n1.priority);
             return priorityCompare != 0 ? priorityCompare : n1.date.compareTo(n2.date);
@@ -397,7 +553,18 @@ public class Home extends AppCompatActivity {
         }
     }
 
+    private int getPriorityWeight(String priority) {
+        switch (priority) {
+            case "urgent": return 3;
+            case "warning": return 2;
+            case "info": return 1;
+            default: return 0;
+        }
+    }
+
     private void addNotificationView(NotificationItem notification) {
+        if (notificationsContainer == null) return;
+
         LinearLayout notificationItem = new LinearLayout(this);
         notificationItem.setOrientation(LinearLayout.HORIZONTAL);
         notificationItem.setPadding(dpToPx(16), dpToPx(12), dpToPx(16), dpToPx(12));
@@ -407,20 +574,11 @@ public class Home extends AppCompatActivity {
         itemParams.setMargins(0, dpToPx(4), 0, dpToPx(4));
         notificationItem.setLayoutParams(itemParams);
 
+        // Set background color based on priority
         int bgColor;
-        switch (notification.priority) {
-            case "urgent":
-                bgColor = android.R.color.holo_red_light;
-                break;
-            case "warning":
-                bgColor = android.R.color.holo_orange_light;
-                break;
-            case "info":
-                bgColor = android.R.color.holo_blue_light;
-                break;
-            default:
-                bgColor = android.R.color.white;
-        }
+
+        bgColor = android.R.color.darker_gray;
+
         notificationItem.setBackgroundColor(ContextCompat.getColor(this, bgColor));
 
         LinearLayout contentLayout = new LinearLayout(this);
@@ -451,11 +609,14 @@ public class Home extends AppCompatActivity {
         notificationItem.addView(contentLayout);
 
         notificationItem.setOnClickListener(v -> {
-            notificationsPopup.setVisibility(View.GONE);
+            if (notificationsPopup != null) {
+                notificationsPopup.setVisibility(View.GONE);
+            }
             notificationsVisible = false;
             switch (notification.type) {
                 case "rattrapage": openRattrapages(); break;
                 case "absence": openAbsences(); break;
+                case "seance": openTimetable(); break;
                 case "assignment":
                 case "exam": openDocuments(); break;
             }
@@ -463,21 +624,13 @@ public class Home extends AppCompatActivity {
 
         notificationsContainer.addView(notificationItem);
 
+        // Add divider between notifications
         if (notifications.indexOf(notification) < notifications.size() - 1) {
             View divider = new View(this);
             divider.setLayoutParams(new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(1)));
             divider.setBackgroundColor(ContextCompat.getColor(this, android.R.color.darker_gray));
             notificationsContainer.addView(divider);
-        }
-    }
-
-    private int getPriorityWeight(String priority) {
-        switch (priority) {
-            case "urgent": return 3;
-            case "warning": return 2;
-            case "info": return 1;
-            default: return 0;
         }
     }
 
@@ -503,35 +656,80 @@ public class Home extends AppCompatActivity {
         loadNotificationsFromFirebase();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Clear notifications to prevent memory leaks
+        if (notifications != null) {
+            notifications.clear();
+        }
+    }
+
     // Navigation Methods
     private void openMaps() {
-        startActivity(new Intent(this, maps.class));
+        try {
+            startActivity(new Intent(this, maps.class));
+        } catch (Exception e) {
+            Log.e("Home", "Error opening maps", e);
+            Toast.makeText(this, "Unable to open maps", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void openDocuments() {
-        startActivity(new Intent(this, doc.class));
+        try {
+            startActivity(new Intent(this, doc.class));
+        } catch (Exception e) {
+            Log.e("Home", "Error opening documents", e);
+            Toast.makeText(this, "Unable to open documents", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void openTimetable() {
-        startActivity(new Intent(this, time.class));
+        try {
+            startActivity(new Intent(this, time.class));
+        } catch (Exception e) {
+            Log.e("Home", "Error opening timetable", e);
+            Toast.makeText(this, "Unable to open timetable", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void openRattrapages() {
-        startActivity(new Intent(this, RattrapagesActivity.class));
+        try {
+            startActivity(new Intent(this, RattrapagesActivity.class));
+        } catch (Exception e) {
+            Log.e("Home", "Error opening rattrapages", e);
+            Toast.makeText(this, "Unable to open rattrapages", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void openAbsences() {
-        startActivity(new Intent(this, abs.class));
+        try {
+            startActivity(new Intent(this, abs.class));
+        } catch (Exception e) {
+            Log.e("Home", "Error opening absences", e);
+            Toast.makeText(this, "Unable to open absences", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void openChatbot() {
-        startActivity(new Intent(this, AssistantVirtuel.class));
+        try {
+            startActivity(new Intent(this, AssistantVirtuel.class));
+        } catch (Exception e) {
+            Log.e("Home", "Error opening chatbot", e);
+            Toast.makeText(this, "Unable to open chatbot", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void openSettings() {
-        startActivity(new Intent(this, SettingsActivity.class));
+        try {
+            startActivity(new Intent(this, SettingsActivity.class));
+        } catch (Exception e) {
+            Log.e("Home", "Error opening settings", e);
+            Toast.makeText(this, "Unable to open settings", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    // NotificationItem class
     public static class NotificationItem {
         public String title, description, priority, type;
         public Date date;

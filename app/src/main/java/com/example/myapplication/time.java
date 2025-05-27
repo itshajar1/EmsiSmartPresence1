@@ -45,7 +45,7 @@ public class time extends AppCompatActivity {
             {"16:15", "17:45", "Séance Après-midi 2"}
     };
 
-    private String[] jours = {"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"};
+    private String[] jours = {"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"};
     private String[] couleursJours = {"#E3F2FD", "#F3E5F5", "#E8F5E8", "#FFF3E0", "#FCE4EC"};
 
     @Override
@@ -62,7 +62,13 @@ public class time extends AppCompatActivity {
         tableLayout = findViewById(R.id.tableLayoutSchedule);
         indicateurChargement = findViewById(R.id.loadingIndicator);
         texteEtatVide = findViewById(R.id.emptyStateText);
+        fabActualiser = findViewById(R.id.fabRefresh);
 
+        // Configurer le bouton actualiser
+        fabActualiser.setOnClickListener(v -> {
+            Toast.makeText(this, "Actualisation de l'emploi du temps...", Toast.LENGTH_SHORT).show();
+            chargerEmploiDuTemps();
+        });
 
         // Afficher l'état de chargement
         afficherChargement(true);

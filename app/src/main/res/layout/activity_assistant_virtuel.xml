@@ -1,127 +1,447 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AssistantVirtuel">
 
-    <!-- Main Content -->
+    <!-- Contenu principal -->
     <LinearLayout
         android:id="@+id/layout_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#F5F5F5">
+        android:background="#F8FBF8">
 
-        <!-- Chat Header with Menu -->
+        <!-- En-tête du chat avec menu et indicateur d'état -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="#FFFFFF"
-            android:elevation="4dp"
-            android:padding="16dp"
+            android:elevation="6dp"
+            android:padding="20dp"
             android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/menuIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="@drawable/ripple_effect"
                 android:clickable="true"
-                android:contentDescription="Open navigation menu"
+                android:contentDescription="Ouvrir le menu de navigation"
                 android:focusable="true"
-                android:padding="4dp"
+                android:padding="6dp"
                 android:src="@drawable/ic_menu"
-                tools:ignore="TouchTargetSizeCheck" />
+                />
 
-            <TextView
-                android:id="@+id/chatTitle"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="AI Assistant"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#333333"
-                android:gravity="center"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="40dp" />
+                android:orientation="vertical"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp">
+
+                <TextView
+                    android:id="@+id/chatTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Assistant IA"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#1B1B1B"
+                    android:gravity="center" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="4dp">
+
+                    <View
+                        android:id="@+id/statusIndicator"
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:background="@drawable/status_online"
+                        android:layout_marginEnd="8dp" />
+
+                    <TextView
+                        android:id="@+id/statusText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="En ligne"
+                        android:textSize="12sp"
+                        android:textColor="#6B7280" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/settingsIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/ripple_effect"
+                android:clickable="true"
+                android:contentDescription="Paramètres"
+                android:focusable="true"
+                android:padding="4dp"
+                android:src="@drawable/ic_settings"
+               />
         </LinearLayout>
 
+        <!-- Conteneur des messages du chat -->
         <ScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#FFFFFF"
-            android:padding="12dp"
-            android:contentDescription="Chat conversation history"
-            android:scrollbars="vertical">
+            android:background="#F8FBF8"
+            android:padding="16dp"
+            android:contentDescription="Historique de la conversation"
+            android:scrollbars="none"
+            android:overScrollMode="never">
 
             <LinearLayout
                 android:id="@+id/chatContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:importantForAccessibility="yes" />
+                android:importantForAccessibility="yes"
+                android:paddingBottom="20dp" />
         </ScrollView>
 
-        <!-- Message Input Area -->
+        <!-- Indicateur de saisie (caché par défaut) -->
+        <LinearLayout
+            android:id="@+id/typingIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="start"
+            android:padding="16dp"
+            android:background="#F8FBF8"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="L'IA est en train de taper..."
+                android:textSize="14sp"
+                android:textColor="#6B7280"
+                android:textStyle="italic"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <!-- Zone de saisie -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#FFFFFF"
+            android:elevation="12dp">
+
+            <!-- Barre d'actions rapides -->
+            <LinearLayout
+                android:id="@+id/quickActionsBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:background="#F3F4F6"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/suggestedAction1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Comment puis-je aider ?"
+                    android:background="@drawable/suggestion_chip"
+                    android:padding="8dp"
+                    android:textSize="12sp"
+                    android:textColor="#2E7D32"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+                <TextView
+                    android:id="@+id/suggestedAction2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Expliquer cela"
+                    android:background="@drawable/suggestion_chip"
+                    android:padding="8dp"
+                    android:textSize="12sp"
+                    android:textColor="#2E7D32"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true" />
+            </LinearLayout>
+
+            <!-- Champ de saisie -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:background="@drawable/input_background"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:layout_marginEnd="12dp">
+
+                    <EditText
+                        android:id="@+id/prompt"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:hint="Tapez votre message..."
+                        android:textColorHint="#9CA3AF"
+                        android:importantForAccessibility="yes"
+                        android:maxLines="4"
+                        android:minHeight="24dp"
+                        android:textColor="#1B1B1B"
+                        android:textSize="16sp"
+                        android:lineSpacingExtra="2dp" />
+
+                    <ImageView
+                        android:id="@+id/attachIcon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/ripple_round"
+                        android:clickable="true"
+                        android:contentDescription="Joindre un fichier"
+                        android:focusable="true"
+                        android:padding="4dp"
+                        android:src="@drawable/ic_attach"
+
+                        android:layout_marginStart="8dp" />
+                </LinearLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:elevation="3dp"
+                    app:cardCornerRadius="28dp"
+                    app:cardBackgroundColor="#E8F5E8">
+
+                    <ImageView
+                        android:id="@+id/btnSend"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ripple_round"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_send"
+                         />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Menu latéral -->
+    <LinearLayout
+        android:layout_width="320dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#FFFFFF"
+        android:elevation="16dp"
+        android:orientation="vertical">
+
+        <!-- En-tête du menu -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/drawer_header_gradient"
+            android:padding="24dp">
+
+            <ImageView
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:background="@drawable/avatar_background"
+                android:src="@drawable/ic_ai_avatar"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Assistant IA"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Votre compagnon intelligent"
+                android:textSize="14sp"
+                android:textColor="#E8F5E8"
+                android:alpha="0.9" />
+        </LinearLayout>
+
+        <!-- Contenu du menu -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:contentDescription="Contenu du menu de navigation">
+
+            <LinearLayout
+                android:id="@+id/drawerContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:importantForAccessibility="yes"
+                android:padding="8dp">
+
+                <!-- Éléments du menu -->
+                <LinearLayout
+                    android:id="@+id/navNewChat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/nav_item_background"
+                    android:padding="16dp"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginBottom="4dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_add_chat"
+
+                        android:layout_marginEnd="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nouvelle discussion"
+                        android:textSize="16sp"
+                        android:textColor="#1B1B1B" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/navHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/nav_item_background"
+                    android:padding="16dp"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginBottom="4dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_history"
+
+                        android:layout_marginEnd="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Historique"
+                        android:textSize="16sp"
+                        android:textColor="#1B1B1B" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/navSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/nav_item_background"
+                    android:padding="16dp"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginBottom="4dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_settings"
+
+                        android:layout_marginEnd="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Paramètres"
+                        android:textSize="16sp"
+                        android:textColor="#1B1B1B" />
+                </LinearLayout>
+
+                <!-- Séparateur -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E5E7EB"
+                    android:layout_margin="16dp" />
+
+                <LinearLayout
+                    android:id="@+id/navAbout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/nav_item_background"
+                    android:padding="16dp"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_info"
+
+                        android:layout_marginEnd="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="À propos"
+                        android:textSize="16sp"
+                        android:textColor="#1B1B1B" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- Pied de page du menu -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:background="#FFFFFF"
-            android:padding="12dp"
-            android:elevation="8dp">
+            android:background="#F3F4F6"
+            android:padding="16dp"
+            android:gravity="center">
 
-            <EditText
-                android:id="@+id/prompt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/edittext_background"
-                android:hint="Type your message..."
-                android:importantForAccessibility="yes"
-                android:maxLines="4"
-                android:minHeight="48dp"
-                android:padding="12dp"
-                android:scrollbars="vertical"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <Button
-                android:id="@+id/btnSend"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Send"
-                android:layout_marginStart="8dp"
-                android:backgroundTint="#6200EE"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                android:elevation="2dp"
-                android:contentDescription="Send message" />
+                android:text="Version 1.0"
+                android:textSize="12sp"
+                android:textColor="#9CA3AF" />
         </LinearLayout>
     </LinearLayout>
-
-    <!-- Navigation Drawer -->
-    <ScrollView
-        android:layout_width="280dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="#FFFFFF"
-        android:elevation="8dp"
-        android:contentDescription="Navigation drawer">
-
-        <LinearLayout
-            android:id="@+id/drawerContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:importantForAccessibility="yes" />
-    </ScrollView>
-
-</androidx.drawerlayout.widget.DrawerLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>

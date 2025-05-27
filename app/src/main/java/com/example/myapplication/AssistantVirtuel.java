@@ -36,7 +36,7 @@ import okhttp3.Response;
 
 public class AssistantVirtuel extends AppCompatActivity {
     private EditText editMessage;
-    private Button btnSend;
+    private View btnSend;
     private LinearLayout chatContainer;
     private ScrollView scrollView;
     private DrawerLayout drawerLayout;
@@ -100,9 +100,9 @@ public class AssistantVirtuel extends AppCompatActivity {
 
     private void startNewChat() {
         currentChatId = "chat_" + System.currentTimeMillis();
-        chatTitle.setText("New Chat");
+        chatTitle.setText("Nouvelle discussion");
         chatContainer.removeAllViews();
-        addMessage("Hello! How can I help you today?", false);
+        addMessage("Bonjour ! Comment puis-je vous aider aujourd’hui ?", false);
     }
 
     private void addMessage(String message, boolean isUser) {
@@ -121,7 +121,7 @@ public class AssistantVirtuel extends AppCompatActivity {
         textView.setText(message);
         textView.setTextSize(16);
         textView.setPadding(16, 12, 16, 12);
-        textView.setBackgroundResource(isUser ? R.drawable.user_bubble : R.drawable.bot_bubble);
+        textView.setBackgroundResource(isUser ? R.drawable.user_bubble : R.drawable.edittext_background);
         textView.setTextColor(isUser ? Color.WHITE : Color.BLACK);
 
         LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
@@ -227,17 +227,17 @@ public class AssistantVirtuel extends AppCompatActivity {
         input.setPadding(16, 16, 16, 16);
 
         new AlertDialog.Builder(this)
-                .setTitle("Edit Message")
+                .setTitle("Modifier")
                 .setView(input)
                 .setPositiveButton("Save", (dialog, which) -> {
                     String newText = input.getText().toString().trim();
                     if (!newText.isEmpty()) {
                         textView.setText(newText);
-                        Toast.makeText(this, "Message updated!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Message modifié!", Toast.LENGTH_SHORT).show();
                         saveChatHistory();
                     }
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton("Annuler", null)
                 .show();
     }
 
@@ -246,7 +246,7 @@ public class AssistantVirtuel extends AppCompatActivity {
 
         // Add header
         TextView header = new TextView(this);
-        header.setText("💬 Chat History");
+        header.setText("💬 Historique");
         header.setTextSize(18);
         header.setTextColor(Color.BLACK);
         header.setPadding(16, 20, 16, 20);
@@ -256,7 +256,7 @@ public class AssistantVirtuel extends AppCompatActivity {
 
         // Add "New Chat" button
         TextView newChatBtn = new TextView(this);
-        newChatBtn.setText("➕ New Chat");
+        newChatBtn.setText("➕ Nouvelle discussion");
         newChatBtn.setTextSize(16);
         newChatBtn.setPadding(20, 16, 20, 16);
         newChatBtn.setTextColor(Color.parseColor("#6200EE"));

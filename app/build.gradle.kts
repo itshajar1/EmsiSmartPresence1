@@ -90,4 +90,14 @@ dependencies {
 
     // Image compression
     implementation("id.zelory:compressor:3.0.1")
+    // Add these if you're using CardView or other components
+    implementation ("androidx.cardview:cardview:1.0.0")
+    // OkHttp pour les requêtes HTTP
+ 
+    implementation ("com.prolificinteractive:material-calendarview:1.4.0")
+
+// Gson pour la manipulation JSON
+    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation ("org.json:json:20230227")
+
 }
